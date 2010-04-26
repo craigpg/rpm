@@ -32,6 +32,7 @@ make_notify_task = lambda do
         description = fetch(:newrelic_desc) if exists?(:newrelic_desc)
         changelog = fetch(:newrelic_changelog) if exists?(:newrelic_changelog)
         appname = fetch(:newrelic_appname) if exists?(:newrelic_appname)
+        user = fetch(:newrelic_user) if exists?(:newrelic_user)
         if !changelog
           logger.debug "Getting log of changes for New Relic Deployment details"
           from_revision = source.next_revision(current_revision)
@@ -50,7 +51,8 @@ make_notify_task = lambda do
           :revision => new_revision,
           :changelog => changelog, 
           :description => description,
-          :appname => appname }
+          :appname => appname,
+          :user => user }
         logger.debug "Uploading deployment to New Relic"
         deployment = NewRelic::Commands::Deployments.new deploy_options
         deployment.run
